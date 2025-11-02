@@ -13,13 +13,16 @@ import (
 	"os"
 )
 
-func Main() {
+func Main(version string) {
 	command.CheckSSH()
 
 	args := os.Args[1:]
 
 	action, value := command.Which()
 	switch action {
+	case command.ShowVersion:
+		fmt.Printf("ggh version %s\n", version)
+		return
 	case command.InteractiveHistory:
 		args = interactive.History()
 	case command.InteractiveConfig:

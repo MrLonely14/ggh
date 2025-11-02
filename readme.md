@@ -14,13 +14,13 @@ Run one of the following script, or download the latest binary from the [release
 
 ```shell
 # Unix based
-curl https://raw.githubusercontent.com/MrLonely14/ggh/MrLonely14/install/unix.sh | sh
+curl https://raw.githubusercontent.com/MrLonely14/ggh/master/install/unix.sh | sh
 
-# Windows 
-powershell -c "irm https://raw.githubusercontent.com/MrLonely14/ggh/MrLonely14/install/windows.ps1 | iex"
+# Windows
+powershell -c "irm https://raw.githubusercontent.com/MrLonely14/ggh/master/install/windows.ps1 | iex"
 
 # Go
-go install github.com/MrLonely14/ggh@MrLonely14
+go install github.com/MrLonely14/ggh@latest
 ```
 
 ## Usages

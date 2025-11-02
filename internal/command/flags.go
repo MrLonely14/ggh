@@ -16,6 +16,7 @@ const (
 	InteractiveTunnels
 	ListTunnels
 	SelectTunnels
+	ShowVersion
 )
 
 func Which() (Action, string) {
@@ -25,6 +26,8 @@ func Which() (Action, string) {
 
 	if len(os.Args) == 2 {
 		switch os.Args[1] {
+		case "-v", "--version", "version":
+			return ShowVersion, ""
 		case "--history":
 			return ListHistory, ""
 		case "--config":
