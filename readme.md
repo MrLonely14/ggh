@@ -10,17 +10,17 @@
 
 ## Install
 
-Run one of the following script, or download the latest binary from the [releases](https://github.com/BlackOrder/ggh/releases) page.
+Run one of the following script, or download the latest binary from the [releases](https://github.com/MrLonely14/ggh/releases) page.
 
 ```shell
 # Unix based
-curl https://raw.githubusercontent.com/BlackOrder/ggh/blackorder/install/unix.sh | sh
+curl https://raw.githubusercontent.com/MrLonely14/ggh/MrLonely14/install/unix.sh | sh
 
 # Windows 
-powershell -c "irm https://raw.githubusercontent.com/BlackOrder/ggh/blackorder/install/windows.ps1 | iex"
+powershell -c "irm https://raw.githubusercontent.com/MrLonely14/ggh/MrLonely14/install/windows.ps1 | iex"
 
 # Go
-go install github.com/BlackOrder/ggh@blackorder
+go install github.com/MrLonely14/ggh@MrLonely14
 ```
 
 ## Usages
