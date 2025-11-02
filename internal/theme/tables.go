@@ -13,6 +13,7 @@ type TableStyle int
 const (
 	ConfigTable TableStyle = iota
 	HistoryTable
+	TunnelTable
 )
 
 const (
@@ -46,6 +47,14 @@ func GetColumns(what TableStyle) []table.Column {
 			{Title: "User", Width: 10},
 			{Title: "Key", Width: 10},
 			{Title: "Last login", Width: 15},
+		}...)
+	case TunnelTable:
+		columns = append(columns, []table.Column{
+			{Title: "Name", Width: 15},
+			{Title: "Type", Width: 10},
+			{Title: "Local Port", Width: 10},
+			{Title: "Remote", Width: 20},
+			{Title: "Description", Width: 25},
 		}...)
 	}
 
@@ -165,6 +174,48 @@ func AdjustTableDimensions(cols []table.Column, windowWidth int, windowHeight in
 			cols[5].Width = baseWidths[5]                   // Last login
 		} else {
 			// Not enough space → scale all columns proportionally
+			ratio := float64(widthForTableContent) / float64(totalBase)
+			for i := range cols {
+				w := max(int(math.Round(float64(baseWidths[i])*ratio)), 1)
+				cols[i].Width = w
+			}
+		}
+
+		// TUNNEL TABLE (case 5 columns, but different from ConfigTable)
+		// We need to handle this after config table
+	}
+
+	// Special handling for tunnel table by checking column titles
+	if len(cols) == 5 && cols[0].Title == "Name" && cols[1].Title == "Type" {
+		// columns = [Name, Type, Local Port, Remote, Description]
+		// base widths = 15,10,10,20,25 = total 80
+		baseWidths := []int{15, 10, 10, 20, 25}
+		const totalBase = 80
+
+		if widthForTableContent >= totalBase {
+			leftover := widthForTableContent - totalBase
+			// Give extra space to Description and Remote
+			leftoverForDesc := 0
+			leftoverForRemote := 0
+
+			for leftover > 0 {
+				if leftover >= 2 {
+					leftoverForDesc++
+					leftoverForRemote++
+					leftover -= 2
+				} else {
+					leftoverForDesc++
+					leftover--
+				}
+			}
+
+			cols[0].Width = baseWidths[0]                     // Name
+			cols[1].Width = baseWidths[1]                     // Type
+			cols[2].Width = baseWidths[2]                     // Local Port
+			cols[3].Width = baseWidths[3] + leftoverForRemote // Remote
+			cols[4].Width = baseWidths[4] + leftoverForDesc   // Description
+		} else {
+			// Scale all columns proportionally
 			ratio := float64(widthForTableContent) / float64(totalBase)
 			for i := range cols {
 				w := max(int(math.Round(float64(baseWidths[i])*ratio)), 1)

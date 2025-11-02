@@ -13,6 +13,9 @@ const (
 	InteractiveConfigWithSearch
 	ListHistory
 	ListConfig
+	InteractiveTunnels
+	ListTunnels
+	SelectTunnels
 )
 
 func Which() (Action, string) {
@@ -26,6 +29,12 @@ func Which() (Action, string) {
 			return ListHistory, ""
 		case "--config":
 			return ListConfig, ""
+		case "--tunnels":
+			return ListTunnels, ""
+		case "tunnels":
+			return InteractiveTunnels, ""
+		case "-t":
+			return SelectTunnels, ""
 		case "-":
 			return InteractiveConfig, ""
 		}
