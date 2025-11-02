@@ -5,6 +5,7 @@ import (
 	"github.com/byawitz/ggh/internal/config"
 	"github.com/byawitz/ggh/internal/history"
 	"github.com/byawitz/ggh/internal/ssh"
+	"github.com/byawitz/ggh/internal/theme"
 	"github.com/charmbracelet/bubbles/table"
 	"log"
 	"os"
@@ -28,8 +29,9 @@ func Config(value string) []string {
 			c.Key,
 		})
 	}
-	c := Select(rows, SelectConfig)
-	return ssh.GenerateCommandArgs(c)
+	c := Select(rows, theme.ConfigTable)
+	history.AddHistory(c)
+	return []string{c.Name}
 }
 
 func History() []string {
@@ -56,6 +58,11 @@ func History() []string {
 			fmt.Sprintf("%s", history.ReadableTime(currentTime.Sub(historyItem.Date))),
 		})
 	}
-	c := Select(rows, SelectHistory)
-	return ssh.GenerateCommandArgs(c)
+	c := Select(rows, theme.HistoryTable)
+	c.CleanName()
+	history.AddHistory(c)
+	if c.IsDirectSSH() {
+		return ssh.GenerateCommandArgs(c)
+	}
+	return []string{c.Name}
 }

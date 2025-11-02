@@ -20,6 +20,29 @@ type SSHConfig struct {
 	Key  string `json:"key"`
 }
 
+const (
+	DirectSSH     = "──────────────"
+	MissingConfig = "❗"
+)
+
+func (c *SSHConfig) IsDirectSSH() bool {
+	return c.Name == "" || c.Name == DirectSSH
+}
+
+func (c *SSHConfig) UniqueKey() string {
+	if !c.IsDirectSSH() {
+		return c.Name
+	}
+	return fmt.Sprintf("%s%s%s", c.Host, c.Port, c.User)
+}
+
+func (c *SSHConfig) CleanName() {
+	if c.Name == DirectSSH {
+		c.Name = ""
+	}
+	c.Name = strings.TrimPrefix(c.Name, MissingConfig)
+}
+
 func Parse(configFile string) ([]SSHConfig, error) {
 	return ParseWithSearch("", configFile)
 }
@@ -145,6 +168,6 @@ func Print() {
 	for _, history := range list {
 		rows = append(rows, table.Row{history.Name, history.Host, history.Port, history.User, history.Key})
 	}
-	fmt.Println(theme.PrintTable(rows, theme.PrintConfig))
+	fmt.Println(theme.PrintTable(rows, theme.ConfigTable))
 
 }

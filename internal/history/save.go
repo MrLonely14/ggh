@@ -6,7 +6,6 @@ import (
 	"github.com/byawitz/ggh/internal/config"
 	"github.com/charmbracelet/bubbles/table"
 	"os"
-	"slices"
 	"strings"
 	"time"
 )
@@ -97,6 +96,33 @@ func RemoveByIP(row table.Row) {
 
 }
 
+func RemoveByName(row table.Row) {
+	list, err := Fetch(getFile())
+
+	if err != nil {
+		fmt.Println("error getting ggh file")
+		return
+	}
+
+	cName := row[0]
+
+	saving := make([]SSHHistory, 0, len(list)-1)
+
+	for _, item := range list {
+		if item.Connection.Name == cName {
+			continue
+		}
+
+		saving = append(saving, item)
+	}
+
+	err = saveFile(SSHHistory{}, saving)
+	if err != nil {
+		panic("error saving ggh file")
+	}
+
+}
+
 func saveFile(n SSHHistory, l []SSHHistory) error {
 	file := getFileLocation()
 	fileContent := stringify(n, l)
@@ -109,18 +135,17 @@ func saveFile(n SSHHistory, l []SSHHistory) error {
 func stringify(n SSHHistory, l []SSHHistory) string {
 	history := make([]SSHHistory, 0)
 
-	for i, sshHistory := range l {
-		if sshHistory.Connection.Host == n.Connection.Host &&
-			sshHistory.Connection.Name == n.Connection.Name {
-			l = slices.Delete(l, i, i+1)
-		}
-	}
-
 	if n.Connection.Host != "" {
 		history = append(history, n)
 	}
 
-	history = append(history, l...)
+	for _, sshHistory := range l {
+		sshHistory.Connection.CleanName()
+		if sshHistory.Connection.UniqueKey() != n.Connection.UniqueKey() {
+			history = append(history, sshHistory)
+		}
+	}
+
 	content, err := json.Marshal(history)
 
 	if err != nil {
