@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/byawitz/ggh/internal/tunnel"
+	"github.com/MrLonely14/ggh/internal/tunnel"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 )

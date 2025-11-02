@@ -8,7 +8,7 @@ import (
 
 	"path/filepath"
 
-	"github.com/byawitz/ggh/internal/theme"
+	"github.com/MrLonely14/ggh/internal/theme"
 	"github.com/charmbracelet/bubbles/table"
 )
 

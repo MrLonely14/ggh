@@ -2,10 +2,10 @@ package interactive
 
 import (
 	"fmt"
-	"github.com/byawitz/ggh/internal/config"
-	"github.com/byawitz/ggh/internal/history"
-	"github.com/byawitz/ggh/internal/settings"
-	"github.com/byawitz/ggh/internal/theme"
+	"github.com/MrLonely14/ggh/internal/config"
+	"github.com/MrLonely14/ggh/internal/history"
+	"github.com/MrLonely14/ggh/internal/settings"
+	"github.com/MrLonely14/ggh/internal/theme"
 	"os"
 	"strings"
 

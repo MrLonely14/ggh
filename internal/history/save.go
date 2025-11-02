@@ -3,7 +3,7 @@ package history
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/byawitz/ggh/internal/config"
+	"github.com/MrLonely14/ggh/internal/config"
 	"github.com/charmbracelet/bubbles/table"
 	"os"
 	"strings"

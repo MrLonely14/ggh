@@ -3,7 +3,7 @@ package theme
 import (
 	"math"
 
-	"github.com/byawitz/ggh/internal/settings"
+	"github.com/MrLonely14/ggh/internal/settings"
 	"github.com/charmbracelet/bubbles/table"
 	"github.com/charmbracelet/lipgloss"
 )

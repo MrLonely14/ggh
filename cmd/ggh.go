@@ -2,13 +2,13 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/byawitz/ggh/internal/command"
-	"github.com/byawitz/ggh/internal/config"
-	"github.com/byawitz/ggh/internal/history"
-	"github.com/byawitz/ggh/internal/interactive"
-	"github.com/byawitz/ggh/internal/ssh"
-	"github.com/byawitz/ggh/internal/theme"
-	"github.com/byawitz/ggh/internal/tunnel"
+	"github.com/MrLonely14/ggh/internal/command"
+	"github.com/MrLonely14/ggh/internal/config"
+	"github.com/MrLonely14/ggh/internal/history"
+	"github.com/MrLonely14/ggh/internal/interactive"
+	"github.com/MrLonely14/ggh/internal/ssh"
+	"github.com/MrLonely14/ggh/internal/theme"
+	"github.com/MrLonely14/ggh/internal/tunnel"
 	"github.com/charmbracelet/bubbles/table"
 	"os"
 )

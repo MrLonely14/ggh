@@ -5,9 +5,9 @@ import (
 	"os"
 	"strings"
 
-	"github.com/byawitz/ggh/internal/settings"
-	"github.com/byawitz/ggh/internal/theme"
-	"github.com/byawitz/ggh/internal/tunnel"
+	"github.com/MrLonely14/ggh/internal/settings"
+	"github.com/MrLonely14/ggh/internal/theme"
+	"github.com/MrLonely14/ggh/internal/tunnel"
 	"github.com/charmbracelet/bubbles/table"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"

@@ -1,4 +1,4 @@
-module github.com/byawitz/ggh
+module github.com/MrLonely14/ggh
 
 go 1.24.4
 

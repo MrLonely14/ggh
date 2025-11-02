@@ -1,7 +1,7 @@
 package history
 
 import (
-	"github.com/byawitz/ggh/internal/config"
+	"github.com/MrLonely14/ggh/internal/config"
 	"testing"
 	"time"
 )

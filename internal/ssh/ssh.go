@@ -2,7 +2,7 @@ package ssh
 
 import (
 	"fmt"
-	"github.com/byawitz/ggh/internal/config"
+	"github.com/MrLonely14/ggh/internal/config"
 	"os"
 	"os/exec"
 	"slices"
