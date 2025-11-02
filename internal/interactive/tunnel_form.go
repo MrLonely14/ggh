@@ -296,6 +296,7 @@ func (m tunnelModel) updateForm(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.tunnels = tunnels
 				m.allRows = tunnelsToRows(tunnels)
 				m.filteredRows = m.allRows
+				m.rowToTunnelID = buildTunnelIDMap(tunnels)
 				m.table.SetRows(m.allRows)
 			}
 		}

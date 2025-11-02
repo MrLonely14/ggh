@@ -14,21 +14,22 @@ import (
 )
 
 type tunnelModel struct {
-	table        table.Model
-	allRows      []table.Row
-	filteredRows []table.Row
-	filtering    bool
-	filterText   string
-	selectedIDs  map[string]bool // For multi-select
-	tunnels      []tunnel.Tunnel
-	exit         bool
-	windowWidth  int
-	windowHeight int
-	tableWidth   int
-	tableHeight  int
-	multiSelect  bool
-	showingForm  bool
-	formModel    *tunnelFormModel
+	table         table.Model
+	allRows       []table.Row
+	filteredRows  []table.Row
+	filtering     bool
+	filterText    string
+	selectedIDs   map[string]bool // For multi-select
+	tunnels       []tunnel.Tunnel
+	rowToTunnelID map[int]string  // Maps row index to tunnel ID
+	exit          bool
+	windowWidth   int
+	windowHeight  int
+	tableWidth    int
+	tableHeight   int
+	multiSelect   bool
+	showingForm   bool
+	formModel     *tunnelFormModel
 }
 
 func (m tunnelModel) Init() tea.Cmd { return nil }
@@ -101,7 +102,7 @@ func (m tunnelModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			if selectedRow == nil {
 				return m, nil
 			}
-			tunnelID := selectedRow[len(selectedRow)-1] // ID is stored in hidden last column
+			tunnelID := m.rowToTunnelID[m.table.Cursor()]
 			for _, t := range m.tunnels {
 				if t.ID == tunnelID {
 					m.showingForm = true
@@ -117,20 +118,26 @@ func (m tunnelModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			if selectedRow == nil {
 				return m, nil
 			}
-			tunnelID := selectedRow[len(selectedRow)-1]
+			cursor := m.table.Cursor()
+			tunnelID := m.rowToTunnelID[cursor]
 
 			if err := tunnel.Delete(tunnelID); err == nil {
 				// Remove from display
 				rows := []table.Row{}
 				newTunnels := []tunnel.Tunnel{}
-				for i, row := range m.table.Rows() {
-					if row[len(row)-1] != tunnelID {
-						rows = append(rows, row)
-						newTunnels = append(newTunnels, m.tunnels[i])
+				newMap := make(map[int]string)
+				newIdx := 0
+				for i, t := range m.tunnels {
+					if t.ID != tunnelID {
+						rows = append(rows, m.allRows[i])
+						newTunnels = append(newTunnels, t)
+						newMap[newIdx] = t.ID
+						newIdx++
 					}
 				}
 				m.allRows = rows
 				m.tunnels = newTunnels
+				m.rowToTunnelID = newMap
 				m.table.SetRows(m.allRows)
 
 				if len(m.table.Rows()) == 0 {
@@ -145,7 +152,7 @@ func (m tunnelModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			if m.multiSelect {
 				selectedRow := m.table.SelectedRow()
 				if selectedRow != nil {
-					tunnelID := selectedRow[len(selectedRow)-1]
+					tunnelID := m.rowToTunnelID[m.table.Cursor()]
 					if m.selectedIDs[tunnelID] {
 						delete(m.selectedIDs, tunnelID)
 					} else {
@@ -186,7 +193,7 @@ func (m tunnelModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			// Return single selected tunnel
 			selectedRow := m.table.SelectedRow()
 			if selectedRow != nil {
-				tunnelID := selectedRow[len(selectedRow)-1]
+				tunnelID := m.rowToTunnelID[m.table.Cursor()]
 				m.selectedIDs[tunnelID] = true
 			}
 			return m, tea.Quit
@@ -333,12 +340,13 @@ func SelectTunnels(multiSelect bool) []tunnel.Tunnel {
 	t.SetStyles(s)
 
 	m := tunnelModel{
-		table:        t,
-		allRows:      rows,
-		filteredRows: rows,
-		tunnels:      tunnels,
-		multiSelect:  multiSelect,
-		selectedIDs:  make(map[string]bool),
+		table:         t,
+		allRows:       rows,
+		filteredRows:  rows,
+		tunnels:       tunnels,
+		rowToTunnelID: buildTunnelIDMap(tunnels),
+		multiSelect:   multiSelect,
+		selectedIDs:   make(map[string]bool),
 	}
 
 	var p *tea.Program
@@ -393,10 +401,18 @@ func tunnelsToRows(tunnels []tunnel.Tunnel) []table.Row {
 			fmt.Sprintf("%d", t.LocalPort),
 			remote,
 			desc,
-			t.ID, // Hidden column for ID
 		}
 		rows = append(rows, row)
 	}
 
 	return rows
+}
+
+// buildTunnelIDMap creates a map from row index to tunnel ID
+func buildTunnelIDMap(tunnels []tunnel.Tunnel) map[int]string {
+	idMap := make(map[int]string)
+	for i, t := range tunnels {
+		idMap[i] = t.ID
+	}
+	return idMap
 }
