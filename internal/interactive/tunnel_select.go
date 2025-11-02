@@ -21,7 +21,7 @@ type tunnelModel struct {
 	filterText    string
 	selectedIDs   map[string]bool // For multi-select
 	tunnels       []tunnel.Tunnel
-	rowToTunnelID map[int]string  // Maps row index to tunnel ID
+	rowToTunnelID map[int]string // Maps row index to tunnel ID
 	exit          bool
 	windowWidth   int
 	windowHeight  int
