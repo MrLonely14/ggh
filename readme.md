@@ -25,6 +25,8 @@ go install github.com/MrLonely14/ggh@MrLonely14
 
 ## Usages
 
+### Basic SSH Connection
+
 ```shell
 # Use it just like you're using SSH
 ggh root@server.com
@@ -34,7 +36,7 @@ ggh root@server.com -p2440
 ggh
 
 # Run it with - to get interactive list of all of your ~/.ssh/config listing
-ggh - 
+ggh -
 
 # Run it with - STRING to get interactive filtered list of your ~/.ssh/config listing
 ggh - stage
@@ -44,6 +46,46 @@ ggh - meta-servers
 ggh --config
 ggh --history
 ```
+
+### Port Forwarding Tunnels
+
+GGH includes comprehensive tunnel management for SSH port forwarding:
+
+```shell
+# Manage tunnels interactively (create, edit, delete, select)
+ggh tunnels
+
+# List all saved tunnels
+ggh --tunnels
+
+# Select tunnels and apply to SSH connection
+ggh -t
+```
+
+#### Tunnel Types
+
+GGH supports all three SSH port forwarding types:
+
+- **Local Forwarding (-L)**: Forward local port to remote destination
+  - Example: `8080:localhost:80` - Access remote port 80 via local port 8080
+
+- **Remote Forwarding (-R)**: Forward remote port to local destination
+  - Example: `8080:localhost:3000` - Expose local port 3000 on remote port 8080
+
+- **Dynamic Forwarding (-D)**: SOCKS proxy for dynamic port forwarding
+  - Example: `1080` - Create SOCKS proxy on port 1080
+
+#### Interactive Tunnel Management
+
+When you run `ggh tunnels`, you can:
+
+- **Create new tunnels** (`n` key): Define reusable tunnel configurations
+- **Edit tunnels** (`e` key): Modify existing tunnel settings
+- **Delete tunnels** (`d` key): Remove tunnels you no longer need
+- **Select tunnels** (Space/Enter): Choose tunnels to apply to connections
+- **Filter tunnels** (`/` key): Search through your tunnel list
+
+All tunnels are saved in `~/.ggh/tunnels.json` for easy reuse.
 
 ### GGH is NOT replacing SSH
 
